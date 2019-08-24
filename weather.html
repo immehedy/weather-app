@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title> Weather App </title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous" >
+    </script>
+
+  </head>
+  <body>
+
+
+    <script>
+
+
+    $(document).ready(function(){
+
+      $('#submitWeather').click(function(){
+
+        var city = $("#city").val();
+        var key='4de3768c62b67fe359758977a3efc069';
+
+        if(city!= ''){
+          $.ajax({
+
+            url: 'http://api.openweathermap.org/data/2.5/weather?',
+            type:'GET',
+            dataType:'json',
+            data:{q:city, appid:key, units: 'metric'},
+            success: function(data){
+              $("#city").val('');
+              var wf='';
+              $.each(data.weather, function(index, val){
+                var temp=Math.round(data.main.temp);
+                var temp_min=Math.round(data.main.temp_min);
+                var temp_max=Math.round(data.main.temp_max);
+                wf+='<h1 style="padding-down:30px; padding-right:20px;"> <b>' + data.name +"</b> <img src='http://openweathermap.org/img/wn/"+ data.weather[0].icon +".png'> </h1>"+
+                "<b> Temperature: </b>"+ temp + '&deg;C <br>' +
+                '<b> Weather: </b>' + val.main + '<br>'+
+                '<b> Description: </b>'+ val.description +'<br>'+
+                '<b> precipitation: </b>'+ data.main.precipitation +' mm <br>'+
+                '<b> Wind Speed: </b>'+ data.wind.Speed +' m/s <br>'+
+                "<b> Min Temperature: </b>"+ temp_min + '&deg;C <br>' +
+                "<b> Max Temperature: </b>"+ temp_max + '&deg;C'
+
+              });
+
+              $("#show").html(wf);
+
+
+            }
+          });
+        }
+        else {
+          $("#error").html(alert("The field is empty"));
+        }
+      });
+
+    });
+
+
+
+    </script>
+
+
+
+    <div class="jumbotron" style="margin-bottom:0px; color:white; background-image: url(mountain.jpg);">
+      <h2 class="text-center" style="font-size:50px; font-weight:600;">Weather forecast</h2>
+      <h3 class="text-center text-primary" id="enterCity">Current Weather Information From Open Weather</h3>
+      </div>
+
+      <div class="container" style="height:500px;">
+
+        <div class="row" style="margin-bottom:20px;">
+
+          <span id="error"></span>
+        </div>
+        <div class="row form-group " id="rowDiv">
+          <input type="text" name="city"id="city" class="form-control" placeholder="City Name">
+          <button  id="submitWeather" class="btn btn-primary">Search City</button>
+        </div>
+
+        <div  id="show"></div>
+        </div>
+
+        <div class="footer">
+          <div class="container">
+            <div class="row-text-center" style="padding-top:20px;">
+                <p style="color:white"> copyright &copy; weather forecast by Mehedy </p>
+            </div>
+          </div>
+        </div>
+
+
+
+
+  </body>
+</html>
